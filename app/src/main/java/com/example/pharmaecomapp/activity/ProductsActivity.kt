@@ -1,7 +1,9 @@
 package com.example.pharmaecomapp.activity
 
+import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
+import android.view.View
 import android.widget.Button
 import android.widget.LinearLayout
 import android.widget.TextView
@@ -21,12 +23,21 @@ class ProductsActivity : AppCompatActivity(), ProductsAdapter.CartButtonClickLis
     private lateinit var btnAddToCart: Button
     // Initialize the list of selected products
     private val selectedProducts = mutableMapOf<Product, Int>()
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityProductsBinding.inflate(layoutInflater)
         setContentView(binding.root)
         // Set up the toolbar
         setSupportActionBar(binding.toolbar)
+
+        // Cart icon click
+        binding.ivCart.setOnClickListener {
+            startActivity(Intent(this, CartActivity::class.java))
+        }
+
+        // Badge starts hidden (0 products)
+        updateCartBadge()
 
         // Get category ID and name from the intent
         val categoryId = intent.getIntExtra("CATEGORY_ID", -1)
@@ -35,8 +46,7 @@ class ProductsActivity : AppCompatActivity(), ProductsAdapter.CartButtonClickLis
         // Update the toolbar title
         supportActionBar?.title = categoryName
 
-
-        Toast.makeText(this,categoryName,Toast.LENGTH_SHORT).show()
+        Toast.makeText(this, categoryName, Toast.LENGTH_SHORT).show()
 
         // Sample products for the demo
         val sampleProducts = listOf(
@@ -55,21 +65,27 @@ class ProductsActivity : AppCompatActivity(), ProductsAdapter.CartButtonClickLis
         // Filter products based on the selected category
         val filteredProducts = sampleProducts.filter { it.id == categoryId }
 
-        productsAdapter = ProductsAdapter(this,filteredProducts,this)
+        productsAdapter = ProductsAdapter(this, filteredProducts, this)
         binding.rvProducts.adapter = productsAdapter
         // Set LayoutManager to GridLayoutManager with 2 columns
         binding.rvProducts.layoutManager = GridLayoutManager(this, 2)
     }
 
-
     private fun addProductToCart(product: Product, quantity: Int) {
         selectedProducts[product] = quantity
-         showCartBottomSheet() // Show cart bottom sheet when a product is added
+        updateCartBadge()       // update the number on the cart icon
+        showCartBottomSheet()   // Show cart bottom sheet when a product is added
     }
 
-
-
-
+    private fun updateCartBadge() {
+        val count = selectedProducts.size
+        if (count > 0) {
+            binding.tvCartBadge.text = if (count > 99) "99+" else count.toString()
+            binding.tvCartBadge.visibility = View.VISIBLE
+        } else {
+            binding.tvCartBadge.visibility = View.GONE
+        }
+    }
 
     private fun showCartBottomSheet() {
         if (selectedProducts.isNotEmpty()) {
@@ -78,25 +94,13 @@ class ProductsActivity : AppCompatActivity(), ProductsAdapter.CartButtonClickLis
             bottomSheetDialog.setContentView(view)
 
             val containerProducts: LinearLayout = view.findViewById(R.id.containerProducts)
-             btnAddToCart = view.findViewById(R.id.btnAddToCart)
-
+            btnAddToCart = view.findViewById(R.id.btnAddToCart)
 
             populateCartSummary(containerProducts)
-
 
             btnAddToCart.setOnClickListener {
                 handleAddToCartAction(bottomSheetDialog)
             }
-
-
-
-            btnAddToCart.setOnClickListener {
-                // Handle add to cart action
-                // For example, you can clear the selectedProducts list or navigate to another activity
-                selectedProducts.clear()
-//                bottomSheetDialog.dismiss()
-            }
-
 
             // Now that btnAddToCart is initialized, pass it to the adapter
             productsAdapter.setCartButton(btnAddToCart)
@@ -104,7 +108,6 @@ class ProductsActivity : AppCompatActivity(), ProductsAdapter.CartButtonClickLis
             bottomSheetDialog.show()
         }
     }
-
 
     private fun populateCartSummary(containerProducts: LinearLayout) {
         selectedProducts.forEach { (product, quantity) ->
@@ -120,13 +123,13 @@ class ProductsActivity : AppCompatActivity(), ProductsAdapter.CartButtonClickLis
         }
     }
 
-
     private fun handleAddToCartAction(bottomSheetDialog: BottomSheetDialog) {
         selectedProducts.clear()
+        updateCartBadge()       // reset badge
         bottomSheetDialog.dismiss()
     }
+
     override fun onAddToCartButtonClick(product: Product, quantity: Int) {
         addProductToCart(product, quantity)
     }
-
 }
