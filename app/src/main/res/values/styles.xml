@@ -1,6 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 <!-- Define an oval shape style -->
+    <style name="DialogFragmentTheme" parent="Theme.AppCompat.Dialog">
+        <item name="android:windowBackground">@android:color/transparent</item>
+        <item name="android:windowNoTitle">true</item>
+        <item name="android:backgroundDimEnabled">true</item>
+    </style>
 <style name="OvalShape">
     <item name="cornerFamily">rounded</item>
     <item name="cornerSize">50%</item>

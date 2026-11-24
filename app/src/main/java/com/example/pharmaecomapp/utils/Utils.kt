@@ -4,6 +4,7 @@ import android.util.Log
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentActivity
+import com.example.pharmaecomapp.R
 import com.example.pharmaecomapp.activity.HomeActivity
 
 object  Utils {
@@ -31,7 +32,12 @@ object  Utils {
                 try {
                     Log.e("UtilsError", "No issue in utils")
 
-                    activity.binding.bottomNavigation.selectedItemId = itemId
+                    activity.binding.bottomBar.itemActiveIndex = when (itemId) {
+                        R.id.item0 -> 0
+                        R.id.item1 -> 1
+                        R.id.item2 -> 2
+                        else -> 0
+                    }
 
                 } catch (e: Exception) {
                     Toast.makeText(activity,e.toString(),Toast.LENGTH_SHORT).show()

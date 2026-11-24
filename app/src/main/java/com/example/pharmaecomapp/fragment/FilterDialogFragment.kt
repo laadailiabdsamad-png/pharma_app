@@ -91,7 +91,7 @@ class FilterDialogFragment : Fragment() {
 
             Utils.loadFragment(1, requireActivity(),HomeFragment(),
                 R.id.fragmentContainerView2,
-                R.id.nav_home
+                itemId = R.id.item0
             )
 
 

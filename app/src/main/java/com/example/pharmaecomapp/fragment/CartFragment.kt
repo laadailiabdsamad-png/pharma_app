@@ -74,7 +74,7 @@ class CartFragment : Fragment() {
 
 
     private fun setupRecyclerView() {
-        cartAdapter = CartAdapter(this, CartManager.getCartItems().toList().toMutableList())
+        cartAdapter = CartAdapter(requireContext(), CartManager.getCartItems().toList().toMutableList())
         binding.rvCartItems.adapter = cartAdapter
         binding.rvCartItems.layoutManager = LinearLayoutManager(requireContext())
         // Check if the cart is empty and update the UI accordingly
