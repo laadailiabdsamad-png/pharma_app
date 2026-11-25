@@ -88,6 +88,18 @@
             android:fontFamily="@font/roboto_bold"
             android:textColor="@color/white"
             android:textSize="16sp" />
+
+        <RadioButton
+            android:id="@+id/radioButton"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Admin" />
+
+        <RadioButton
+            android:id="@+id/radioButton2"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Client" />
         <!-- android:onClick="@{()->loginViewModel.submit()}"-->
     </LinearLayout>
 

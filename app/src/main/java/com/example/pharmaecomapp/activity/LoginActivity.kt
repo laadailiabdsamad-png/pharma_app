@@ -32,12 +32,6 @@ class LoginActivity : AppCompatActivity() {
         login()
         skipLogin()
 
-
-
-
-
-
-
     }
 
     private fun skipLogin() {
@@ -57,20 +51,24 @@ class LoginActivity : AppCompatActivity() {
             val mobileNumber = binding.editMobNo.text.toString()
             val password = binding.editPassword.text.toString()
 
-            // Validate input
+
             if (mobileNumber.isEmpty() || password.isEmpty()) {
-                // If any field is empty
+
                 Toast.makeText(this, "Please fill in all fields", Toast.LENGTH_SHORT).show()
             } else if (mobileNumber == "9696969696" && password == "123456") {
-                // If login credentials are correct
 
 
-                val intent = Intent(this, HomeActivity::class.java)
-                startActivity(intent)
-                Toast.makeText(this, "Login Successful", Toast.LENGTH_SHORT).show()// Launch the new activity
-                // Navigate to the next screen or perform any further actions
+
+                if (binding.radioButton.isChecked) {
+                    val intent = Intent(this, AddProductActivity::class.java)
+                    startActivity(intent)
+                } else {
+                    val intent = Intent(this, HomeActivity::class.java)
+                    startActivity(intent)
+                }
+
+                Toast.makeText(this, "Login Successful", Toast.LENGTH_SHORT).show()
             } else {
-                // If login credentials are incorrect
                 Toast.makeText(this, "Incorrect mobile number or password", Toast.LENGTH_SHORT)
                     .show()
             }
